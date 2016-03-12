@@ -9,4 +9,18 @@ class Delete extends Change {
     public Delete(String text) {
         this.text = text;
     }
+
+    @Override
+    Text apply(int pos, Text text) throws ValidationException {
+        if (!text.buffer.equals(this.text, pos, this.text.length()))
+            throw new ValidationException("Trying to delete part of a text which is not equal to originally deleted");
+
+        text.buffer.delete(pos, pos + this.text.length());
+        return text;
+    }
+
+    @Override
+    int offset() {
+        return 0;
+    }
 }

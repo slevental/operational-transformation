@@ -136,8 +136,10 @@ class GapBuffer implements CharSequence {
     }
 
     public void insert(int pos, String subStr) {
-        if (pos < 0 || pos > length())
+        if (pos < 0)
             throw new IllegalArgumentException("negative position is prohibited");
+        if (pos > length())
+            throw new IllegalArgumentException("bigger that length position is prohibited");
 
         if (subStr == null)
             throw new IllegalArgumentException("inserted string must not be null");

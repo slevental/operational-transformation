@@ -22,8 +22,8 @@ public class TextApplyTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] d = {
-                {"qwerty56uiop", "1234567890"}
-                , {"I'm wwork", "I'm working"}
+                {"I'm wwork", "I'm working"}
+                , {"qwerty56uiop", "1234567890"}
                 , {"cat", "cow"}
                 , {"this is a test", "that is a post"}
                 , {"I have a nice test", "He has a nice test"}
