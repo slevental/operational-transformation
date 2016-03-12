@@ -12,9 +12,7 @@ class Delete extends Change {
 
     @Override
     Text apply(int pos, Text text) throws ValidationException {
-        if (!text.buffer.equals(this.text, pos, this.text.length()))
-            throw new ValidationException("Trying to delete part of a text which is not equal to originally deleted");
-
+        assertDel(pos, text.buffer, this.text);
         text.buffer.delete(pos, pos + this.text.length());
         return text;
     }
@@ -22,5 +20,10 @@ class Delete extends Change {
     @Override
     int offset() {
         return 0;
+    }
+
+    private static void assertDel(int pos, GapBuffer text, String toDel) throws ValidationException {
+        if (!text.equals(toDel, pos, toDel.length()))
+            throw new ValidationException("Trying to delete part of a text which is not equal to originally deleted");
     }
 }
