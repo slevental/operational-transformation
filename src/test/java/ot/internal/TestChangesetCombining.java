@@ -67,11 +67,10 @@ public class TestChangesetCombining {
     public void test() throws Exception {
         Change diff1 = original.diff(user1);
         Change diff2 = original.diff(user2);
-        Change fixedDiff1 = diff1.transform(diff2);
-        Change fixedDiff2 = diff2.transform(diff1);
 
-        Text actual1 = Text.copy(original).apply(diff1).apply(fixedDiff2);
-        Text actual2 = Text.copy(original).apply(diff2).apply(fixedDiff1);
+        Transform.Result res = Transform.transform(diff1, diff2);
+        Text actual1 = Text.copy(original).apply(diff1).apply(res.getLeft());
+        Text actual2 = Text.copy(original).apply(diff2).apply(res.getRight());
 
         assertEquals(String.format("'%s' != '%s'", expected, actual1), expected, actual1);
         assertEquals(String.format("'%s' != '%s'", expected, actual2), expected, actual2);

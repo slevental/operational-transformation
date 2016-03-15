@@ -26,6 +26,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.stream.Collectors.toList;
+
 /*
  * Functions for diff, match and patch.
  * Computes the difference between two texts to create a patch.
@@ -78,6 +80,28 @@ class DiffUtils {
    * The number of bits in an int.
    */
   private short Match_MaxBits = 32;
+
+  public static Change diff(Text txt1, Text txt2) {
+      LinkedList<Diff> res = INSTANCE.diff_main(
+              txt1.buffer.toString(),
+              txt2.buffer.toString()
+      );
+      INSTANCE.diff_cleanupSemantic(res);
+      return new Changes(res.stream().map(DiffUtils::convert).collect(toList()));
+  }
+
+  private static Change convert(Diff diff) {
+      switch (diff.operation) {
+          case DELETE:
+              return new DeleteChars(diff.text);
+          case INSERT:
+              return new InsertChars(diff.text);
+          case EQUAL:
+              return new Equal(diff.text.length());
+          default:
+              throw new IllegalArgumentException("Unsupported diff type: " + diff.operation);
+      }
+  }
 
   /**
    * Internal class for returning results txt diff_linesToChars().
@@ -359,7 +383,7 @@ class DiffUtils {
    * @return LinkedList of Diff objects.
    */
   protected LinkedList<Diff> diff_bisect(String text1, String text2,
-      long deadline) {
+                                         long deadline) {
     // Cache the text lengths to prevent multiple calls.
     int text1_length = text1.length();
     int text2_length = text2.length();

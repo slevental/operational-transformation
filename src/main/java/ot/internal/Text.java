@@ -1,10 +1,5 @@
 package ot.internal;
 
-import java.util.LinkedList;
-
-import static java.util.stream.Collectors.toList;
-import static ot.internal.DiffUtils.INSTANCE;
-
 /**
  * Created by Stas on 3/12/16.
  */
@@ -20,25 +15,7 @@ public class Text {
     }
 
     public Change diff(Text that) {
-        LinkedList<DiffUtils.Diff> res = INSTANCE.diff_main(
-                this.buffer.toString(),
-                that.buffer.toString()
-        );
-        INSTANCE.diff_cleanupSemantic(res);
-        return new Changes(res.stream().map(Text::convert).collect(toList()));
-    }
-
-    private static Change convert(DiffUtils.Diff diff) {
-        switch (diff.operation) {
-            case DELETE:
-                return new Delete(diff.text);
-            case INSERT:
-                return new Insert(diff.text);
-            case EQUAL:
-                return new Equal(diff.text.length());
-            default:
-                throw new IllegalArgumentException("Unsupported diff type: " + diff.operation);
-        }
+        return DiffUtils.diff(this, that);
     }
 
     public static Text copy(Text original) {

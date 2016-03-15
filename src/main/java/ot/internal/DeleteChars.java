@@ -3,10 +3,10 @@ package ot.internal;
 /**
  * Created by Stas on 3/12/16.
  */
-class Delete extends Change {
+class DeleteChars extends Change {
     private final String text;
 
-    public Delete(String text) {
+    public DeleteChars(String text) {
         this.text = text;
     }
 

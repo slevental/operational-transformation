@@ -5,10 +5,7 @@ package ot.internal;
  */
 public abstract class Change {
 
-    public Change transform(Change diff1) {
-        return this;
-    }
-
     abstract Text apply(int pos, Text text) throws ValidationException;
+
     abstract int offset();
 }
