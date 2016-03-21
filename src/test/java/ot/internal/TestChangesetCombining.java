@@ -27,9 +27,8 @@ public class TestChangesetCombining {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] d = {
-                {"123", "3", "13", "3"},
-                {"", "aaa", "bbb", "aaabbb"},
                 {"Big cat", "Big bat", "Small cat", "Small bat"},
+                {"", "aaa", "bbb", "aaabbb"},
                 {"", "Hello", "Hi", "HelloHi"},
                 {"to be or not to be", "to be or", "or not to be", "or"},
                 {"to be or not to be", "be or", "not to be", ""},
@@ -50,6 +49,7 @@ public class TestChangesetCombining {
                 {"123", "12a3", "", "a"},
                 {"1234", "124", "234", "24"},
                 {"1234", "234", "124", "24"},
+                {"123", "3", "13", "3"},
 
                 {"123", "3", "23", "3"},
                 {"1234", "4", "134", "4"},
