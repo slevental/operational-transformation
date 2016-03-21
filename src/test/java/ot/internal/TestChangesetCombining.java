@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static ot.internal.Text.copy;
 
 @RunWith(Parameterized.class)
 public class TestChangesetCombining {
@@ -26,8 +27,9 @@ public class TestChangesetCombining {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] d = {
-                {"Big cat", "Big bat", "Small cat", "Small bat"},
+                {"123", "3", "13", "3"},
                 {"", "aaa", "bbb", "aaabbb"},
+                {"Big cat", "Big bat", "Small cat", "Small bat"},
                 {"", "Hello", "Hi", "HelloHi"},
                 {"to be or not to be", "to be or", "or not to be", "or"},
                 {"to be or not to be", "be or", "not to be", ""},
@@ -42,17 +44,18 @@ public class TestChangesetCombining {
                 {"123", "1a23", "13", "1a3"},
                 {"123", "12a3", "3", "a3"},
                 {"123", "12a3", "23", "2a3"},
+                {"1234", "134", "4", "4"},
+                {"123", "23", "123b", "23b"},
                 {"123", "12a3", "1", "1a"},
                 {"123", "12a3", "", "a"},
                 {"1234", "124", "234", "24"},
                 {"1234", "234", "124", "24"},
-                {"123", "3", "13", "3"},
+
                 {"123", "3", "23", "3"},
                 {"1234", "4", "134", "4"},
                 {"123", "13", "1", "1"},
                 {"123", "12", "1", "1"},
                 {"1234", "134", "4", "4"},
-                {"123", "23", "123b", "23b"},
                 {"123", "3", "1b23", "b3"},
                 {"123", "13", "1b23", "1b3"},
                 {"123", "1", "1b23", "1b"},
@@ -65,12 +68,12 @@ public class TestChangesetCombining {
 
     @Test
     public void test() throws Exception {
-        Change diff1 = original.diff(user1);
-        Change diff2 = original.diff(user2);
+        Changes diff1 = original.diff(user1);
+        Changes diff2 = original.diff(user2);
 
         Transform.Result res = Transform.transform(diff1, diff2);
-        Text actual1 = Text.copy(original).apply(diff1).apply(res.getLeft());
-        Text actual2 = Text.copy(original).apply(diff2).apply(res.getRight());
+        Text actual1 = copy(original).apply(diff1).apply(res.getRight());
+        Text actual2 = copy(original).apply(diff2).apply(res.getLeft());
 
         assertEquals(String.format("'%s' != '%s'", expected, actual1), expected, actual1);
         assertEquals(String.format("'%s' != '%s'", expected, actual2), expected, actual2);

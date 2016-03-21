@@ -3,10 +3,10 @@ package ot.internal;
 /**
  * Created by Stas on 3/12/16.
  */
-class InsertChars extends Change {
-    private final String text;
+class Insert extends TextChange {
+    final String text;
 
-    public InsertChars(String text) {
+    public Insert(String text) {
         this.text = text;
     }
 
@@ -19,5 +19,10 @@ class InsertChars extends Change {
     @Override
     int offset() {
         return text.length();
+    }
+
+    @Override
+    public String toString() {
+        return "INS: " + text;
     }
 }

@@ -81,7 +81,7 @@ class DiffUtils {
    */
   private short Match_MaxBits = 32;
 
-  public static Change diff(Text txt1, Text txt2) {
+  public static Changes diff(Text txt1, Text txt2) {
       LinkedList<Diff> res = INSTANCE.diff_main(
               txt1.buffer.toString(),
               txt2.buffer.toString()
@@ -93,11 +93,11 @@ class DiffUtils {
   private static Change convert(Diff diff) {
       switch (diff.operation) {
           case DELETE:
-              return new DeleteChars(diff.text);
+              return new Delete(diff.text);
           case INSERT:
-              return new InsertChars(diff.text);
+              return new Insert(diff.text);
           case EQUAL:
-              return new Equal(diff.text.length());
+              return new Retain(diff.text.length());
           default:
               throw new IllegalArgumentException("Unsupported diff type: " + diff.operation);
       }

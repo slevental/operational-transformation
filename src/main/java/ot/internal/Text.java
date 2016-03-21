@@ -14,7 +14,7 @@ public class Text {
         return new Text(new GapBuffer(str));
     }
 
-    public Change diff(Text that) {
+    public Changes diff(Text that) {
         return DiffUtils.diff(this, that);
     }
 
