@@ -1,7 +1,5 @@
 package ot.internal;
 
-import com.google.common.base.MoreObjects;
-
 /**
  * Created by Stas on 3/12/16.
  */
@@ -14,7 +12,7 @@ class Delete extends TextChange {
 
     @Override
     Text apply(int pos, Text text) throws ValidationException {
-//        assertDel(pos, text.buffer, this.text);
+        assertDel(pos, text.buffer, this.text);
         text.buffer.delete(pos, pos + this.text.length());
         return text;
     }
