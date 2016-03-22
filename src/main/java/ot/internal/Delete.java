@@ -1,5 +1,7 @@
 package ot.internal;
 
+import java.util.SortedSet;
+
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
@@ -17,8 +19,12 @@ class Delete extends TextChange {
         int hi = lo + len;
         text.buffer.delete(lo, hi);
         for (Integer p : newArrayList((text.markup.asMap().tailMap(lo, false).keySet()))) {
-            if (p < hi) text.markup.removeAll(p);
-            else text.markup.putAll(p + lo - hi, text.markup.removeAll(p));
+            SortedSet<Markup> m = text.markup.removeAll(p);
+            if (p >= hi) {
+                int d = lo - hi;
+                m.forEach(e -> e.fireShift(d, p + d));
+                text.markup.putAll(p + d, m);
+            }
         }
         return text;
     }

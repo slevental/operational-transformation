@@ -23,15 +23,15 @@ class Changes extends Change {
     Text apply(int pos, Text text) throws ValidationException {
         for (Change change : changes) {
             change.apply(pos, text);
-            pos += change.cursorOffset();
+            pos += change.offset();
         }
         return text;
     }
 
     @Override
-    int cursorOffset() {
+    int offset() {
         int pos = 0;
-        for (Change change : changes) pos += change.cursorOffset();
+        for (Change change : changes) pos += change.offset();
         return pos;
     }
 }

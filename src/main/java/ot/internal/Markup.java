@@ -15,10 +15,16 @@ abstract class Markup extends Change {
         return text;
     }
 
-
     //fixme: Compare
     @Override
     public boolean equals(Object obj) {
         return true;
+    }
+
+    /**
+     * Override to handle notification regarding offset change
+     */
+    public void fireShift(int delta, int pos) {
+        // do nothing
     }
 }

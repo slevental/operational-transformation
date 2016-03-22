@@ -1,6 +1,7 @@
 package ot.internal;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -18,9 +19,12 @@ class Insert extends TextChange {
     Text apply(int pos, Text text) throws ValidationException {
         text.buffer.insert(pos, this.text);
         List<Integer> list = newArrayList((text.markup.asMap().tailMap(pos).keySet()));
+        int d = this.text.length();
         for (int i = list.size() - 1; i >= 0; i--) {
-            text.markup.putAll(list.get(i) + this.text.length(),
-                    text.markup.removeAll(list.get(i)));
+            int newPos = list.get(i) + d;
+            SortedSet<Markup> m = text.markup.removeAll(list.get(i));
+            m.forEach(e -> e.fireShift(d, newPos));
+            text.markup.putAll(newPos, m);
         }
         return text;
     }
