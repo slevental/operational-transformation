@@ -98,7 +98,7 @@ class DiffUtils {
     private static Change convert(Diff diff) {
         switch (diff.operation) {
             case DELETE:
-                return new Delete(diff.text);
+                return new Delete(diff.text.length());
             case INSERT:
                 return new Insert(diff.text);
             case EQUAL:

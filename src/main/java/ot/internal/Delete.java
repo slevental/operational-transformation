@@ -6,16 +6,15 @@ import static com.google.common.collect.Lists.newArrayList;
  * Created by Stas on 3/12/16.
  */
 class Delete extends TextChange {
-    final String text;
+    final int len;
 
-    public Delete(String text) {
-        this.text = text;
+    public Delete(int len) {
+        this.len = len;
     }
 
     @Override
     Text apply(int lo, Text text) throws ValidationException {
-        assertDel(lo, text.buffer, this.text);
-        int hi = lo + this.text.length();
+        int hi = lo + len;
         text.buffer.delete(lo, hi);
         for (Integer p : newArrayList((text.markup.asMap().tailMap(lo, false).keySet()))) {
             if (p < hi) text.markup.removeAll(p);
@@ -25,22 +24,12 @@ class Delete extends TextChange {
     }
 
     @Override
-    int cursorOffset() {
+    int offset() {
         return 0;
     }
 
     @Override
-    int changeSize() {
-        return text.length();
-    }
-
-    private static void assertDel(int pos, GapBuffer text, String toDel) throws ValidationException {
-        if (!text.equals(toDel, pos, toDel.length()))
-            throw new ValidationException("Trying to delete part of a text which is not equal to originally deleted");
-    }
-
-    @Override
     public String toString() {
-        return "DEL: " + text;
+        return "DEL: " + len;
     }
 }

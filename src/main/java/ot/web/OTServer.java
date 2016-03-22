@@ -72,10 +72,10 @@ public class OTServer {
                         t = text.get();
                 }
                 t.apply(IO.fromString(request));
-                ctx.channel().writeAndFlush(new TextWebSocketFrame("OK"));
-                System.out.println(t.toString());
+                ctx.channel().writeAndFlush(new TextWebSocketFrame("TEXT: " + t.toString()));
             }
         }
+
     }
 
 }

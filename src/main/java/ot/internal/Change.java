@@ -7,13 +7,9 @@ public abstract class Change {
 
     abstract Text apply(int pos, Text text) throws ValidationException;
 
-    abstract int cursorOffset();
+    abstract int offset();
 
     int revision() {
         return 0;
-    }
-
-    int changeSize() {
-        return cursorOffset();
     }
 }

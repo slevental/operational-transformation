@@ -12,63 +12,62 @@ public class Transform {
     }
 
     private static void transform(Retain r1, Retain r2, ResultBuilder builder) {
-        if (r1.cursorOffset() == r2.cursorOffset()) {
+        if (r1.offset() == r2.offset()) {
             builder.addLeft(r1);
             builder.addRight(r2);
-        } else if (r1.cursorOffset() > r2.cursorOffset()) {
-            builder.replaceLeft(new Retain(r1.cursorOffset() - r2.cursorOffset()));
-            builder.addLeft(new Retain(r2.cursorOffset()));
+        } else if (r1.offset() > r2.offset()) {
+            builder.replaceLeft(new Retain(r1.offset() - r2.offset()));
+            builder.addLeft(new Retain(r2.offset()));
             builder.addRight(r2);
-        } else if (r1.cursorOffset() < r2.cursorOffset()) {
-            builder.replaceRight(new Retain(r2.cursorOffset() - r1.cursorOffset()));
+        } else if (r1.offset() < r2.offset()) {
+            builder.replaceRight(new Retain(r2.offset() - r1.offset()));
             builder.addLeft(r1);
-            builder.addRight(new Retain(r1.cursorOffset()));
+            builder.addRight(new Retain(r1.offset()));
         }
     }
 
     private static void transform(Retain r1, Insert i2, ResultBuilder builder) {
-        builder.addLeft(new Retain(r1.cursorOffset() + i2.cursorOffset()));
+        builder.addLeft(new Retain(r1.offset() + i2.offset()));
         builder.addRight(i2);
     }
 
     private static void transform(Retain r1, Delete d2, ResultBuilder builder) {
-        if (r1.cursorOffset() == d2.changeSize()) {
+        if (r1.offset() == d2.len) {
             builder.addRight(d2);
-        } else if (r1.cursorOffset() > d2.changeSize()) {
-            builder.replaceLeft(new Retain(r1.cursorOffset() - d2.changeSize()));
+        } else if (r1.offset() > d2.len) {
+            builder.replaceLeft(new Retain(r1.offset() - d2.len));
             builder.addRight(d2);
-        } else if (r1.cursorOffset() < d2.changeSize()) {
-            String txt = d2.text;
-            builder.addRight(new Delete(txt.substring(0, r1.cursorOffset())));
-            builder.replaceRight(new Delete(txt.substring(r1.cursorOffset())));
+        } else if (r1.offset() < d2.len) {
+            builder.addRight(new Delete(r1.offset()));
+            builder.replaceRight(new Delete(d2.len - r1.offset()));
         }
     }
 
     private static void transform(Insert i1, Delete d2, ResultBuilder builder) {
         builder.addLeft(i1);
-        builder.addRight(new Retain(i1.cursorOffset()));
+        builder.addRight(new Retain(i1.offset()));
         builder.addRight(d2);
     }
 
     private static void transform(Insert i1, Insert i2, ResultBuilder builder) {
         if (i1.revision() <= i2.revision()) { //fixme: rev1 == rev2 -should not be possible
             builder.addLeft(i1);
-            builder.addLeft(new Retain(i2.cursorOffset()));
-            builder.addRight(new Retain(i1.cursorOffset()));
+            builder.addLeft(new Retain(i2.offset()));
+            builder.addRight(new Retain(i1.offset()));
             builder.addRight(i2);
         } else {
-            builder.addLeft(new Retain(i2.cursorOffset()));
+            builder.addLeft(new Retain(i2.offset()));
             builder.addLeft(i1);
             builder.addRight(i2);
-            builder.addRight(new Retain(i1.cursorOffset()));
+            builder.addRight(new Retain(i1.offset()));
         }
     }
 
     private static void transform(Delete d1, Delete d2, ResultBuilder builder) {
-        if (d1.changeSize() > d2.changeSize())
-            builder.replaceLeft(new Delete(d1.text.substring(d2.changeSize())));
-        else if (d1.changeSize() < d2.changeSize())
-            builder.replaceRight(new Delete(d2.text.substring(d1.changeSize())));
+        if (d1.len > d2.len)
+            builder.replaceLeft(new Delete(d1.len - d2.len));
+        else if (d1.len < d2.len)
+            builder.replaceRight(new Delete(d2.len - d1.len));
     }
 
     public static Result transform(Changes chs1, Changes chs2) {

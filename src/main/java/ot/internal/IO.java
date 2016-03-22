@@ -17,16 +17,15 @@ public class IO {
 
     public static Change fromString(String str) {
         String[] split = StringUtils.splitPreserveAllTokens(str, '|');
-        if (split.length != 3)
+        if (split.length != 2)
             throw new IllegalArgumentException("Wrong format, expected 3 blocks separated by '|', but was: " + str);
 
         List<Change> res = new ArrayList<>();
         String stream = split[0];
         String inserts = unescape(split[1]);
-        String deletes = unescape(split[2]);
         StringBuilder num = new StringBuilder();
 
-        int ins = 0, del = 0;
+        int ins = 0;
         for (int i = 0; i < stream.length(); i++) {
             num.delete(0, num.length());
             char operation = stream.charAt(i);
@@ -43,7 +42,7 @@ public class IO {
                     res.add(new Insert(inserts.substring(ins, ins += len)));
                     break;
                 case '-':
-                    res.add(new Delete(deletes.substring(del, del += len)));
+                    res.add(new Delete(len));
                     break;
             }
         }
@@ -60,8 +59,8 @@ public class IO {
     public static String toDebugString(Changes ch) {
         StringBuilder stream = new StringBuilder();
         for (Change each : ch.changes) {
-            if (each instanceof Retain) stream.append(repeat("=", each.changeSize()));
-            else if (each instanceof Delete) stream.append("-").append(((Delete) each).text);
+            if (each instanceof Retain) stream.append(repeat("=", each.offset()));
+            else if (each instanceof Delete) stream.append(repeat("-", ((Delete) each).len));
             else if (each instanceof Insert) stream.append(((Insert) each).text);
         }
         return stream.toString();
@@ -69,23 +68,21 @@ public class IO {
 
     static String toString(Changes ch) {
         StringBuilder insert = new StringBuilder();
-        StringBuilder delete = new StringBuilder();
         StringBuilder stream = new StringBuilder();
         for (Change each : ch.changes) {
             if (each instanceof Retain)
-                stream.append("=").append(each.changeSize());
+                stream.append("=").append(each.offset());
             else if (each instanceof Delete) {
-                stream.append("-").append(each.changeSize());
-                delete.append(escape(((Delete) each).text));
+                stream.append("-").append(((Delete) each).len);
             } else if (each instanceof Insert) {
-                stream.append("+").append(each.changeSize());
+                stream.append("+").append(each.offset());
                 //todo: implement method in change (getText or similar)
                 insert.append(escape(((Insert) each).text));
             }
         }
         return stream.append("|")
-                .append(insert).append("|")
-                .append(delete).toString();
+                .append(insert)
+                .toString();
     }
 
     private static String escape(String text) {
