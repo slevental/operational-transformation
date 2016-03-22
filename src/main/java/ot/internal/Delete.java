@@ -1,5 +1,7 @@
 package ot.internal;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 /**
  * Created by Stas on 3/12/16.
  */
@@ -11,9 +13,14 @@ class Delete extends TextChange {
     }
 
     @Override
-    Text apply(int pos, Text text) throws ValidationException {
-//        assertDel(pos, text.buffer, this.text);
-        text.buffer.delete(pos, pos + this.text.length());
+    Text apply(int lo, Text text) throws ValidationException {
+        assertDel(lo, text.buffer, this.text);
+        int hi = lo + this.text.length();
+        text.buffer.delete(lo, hi);
+        for (Integer p : newArrayList((text.markup.asMap().tailMap(lo, false).keySet()))) {
+            if (p < hi) text.markup.removeAll(p);
+            else text.markup.putAll(p + lo - hi, text.markup.removeAll(p));
+        }
         return text;
     }
 

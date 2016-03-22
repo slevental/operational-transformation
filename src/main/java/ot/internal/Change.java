@@ -5,7 +5,6 @@ package ot.internal;
  */
 public abstract class Change {
 
-
     abstract Text apply(int pos, Text text) throws ValidationException;
 
     abstract int offset();
