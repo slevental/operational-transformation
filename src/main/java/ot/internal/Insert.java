@@ -1,9 +1,6 @@
 package ot.internal;
 
-import java.util.List;
-import java.util.SortedSet;
-
-import static com.google.common.collect.Lists.newArrayList;
+import static ot.internal.Transform.transformMarkupAgainstInsert;
 
 /**
  * Created by Stas on 3/12/16.
@@ -18,14 +15,7 @@ class Insert extends TextChange {
     @Override
     Text apply(int pos, Text text) throws ValidationException {
         text.buffer.insert(pos, this.text);
-        List<Integer> list = newArrayList((text.markup.asMap().tailMap(pos).keySet()));
-        int d = this.text.length();
-        for (int i = list.size() - 1; i >= 0; i--) {
-            int newPos = list.get(i) + d;
-            SortedSet<Markup> m = text.markup.removeAll(list.get(i));
-            m.forEach(e -> e.fireShift(d, newPos));
-            text.markup.putAll(newPos, m);
-        }
+        transformMarkupAgainstInsert(text.markup, pos, this.text.length());
         return text;
     }
 

@@ -1,8 +1,10 @@
 package ot.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import com.google.common.collect.TreeMultimap;
+
+import java.util.*;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Created by Stas on 3/15/16.
@@ -91,6 +93,25 @@ public class Transform {
         }
 
         return builder.build();
+    }
+
+    static void transformMarkupAgainstInsert(TreeMultimap<Integer, Markup> markup, int insPos, int insTxtLen) {
+        List<Integer> list = newArrayList((markup.asMap().tailMap(insPos).keySet()));
+        for (int i = list.size() - 1; i >= 0; i--) {
+            int newPos = list.get(i) + insTxtLen;
+            SortedSet<Markup> m = markup.removeAll(list.get(i));
+            m.forEach(e -> e.fireShift(insTxtLen, newPos));
+            markup.putAll(newPos, m);
+        }
+    }
+
+    static void transformMarkupAgainstDelete(TreeMultimap<Integer, Markup> markup, int delPos, int delTextLen) {
+        for (Integer p : newArrayList((markup.asMap().tailMap(delPos, false).keySet()))) {
+            Set<Markup> m = markup.removeAll(p);
+            int d = p >= delPos + delTextLen ? -delTextLen : delPos - p;
+            m.forEach(e -> e.fireShift(d, p + d));
+            markup.putAll(p + d, m);
+        }
     }
 
     @SuppressWarnings("unchecked")
