@@ -16,7 +16,7 @@ class Retain extends TextChange {
     }
 
     @Override
-    int offset() {
+    int cursorOffset() {
         return length;
     }
 

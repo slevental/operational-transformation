@@ -23,6 +23,14 @@ public class Text {
         return new Text(new GapBuffer(str));
     }
 
+    public static Text empty() {
+        return new Text(new GapBuffer(""));
+    }
+
+    public Changes diff(String str) {
+        return DiffUtils.diff(this, str);
+    }
+
     public Changes diff(Text that) {
         return DiffUtils.diff(this, that);
     }

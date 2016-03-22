@@ -5,7 +5,7 @@ package ot.internal;
  */
 abstract class Markup extends Change {
     @Override
-    int offset() {
+    int cursorOffset() {
         return 0;
     }
 

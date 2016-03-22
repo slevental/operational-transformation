@@ -25,12 +25,12 @@ class Delete extends TextChange {
     }
 
     @Override
-    int offset() {
+    int cursorOffset() {
         return 0;
     }
 
     @Override
-    int operationSize() {
+    int changeSize() {
         return text.length();
     }
 

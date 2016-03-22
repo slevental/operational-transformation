@@ -10,7 +10,7 @@ public class InsertElementStart extends Change {
     }
 
     @Override
-    int offset() {
+    int cursorOffset() {
         return 0;
     }
 }

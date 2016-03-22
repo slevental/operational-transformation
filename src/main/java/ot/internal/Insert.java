@@ -26,7 +26,7 @@ class Insert extends TextChange {
     }
 
     @Override
-    int offset() {
+    int cursorOffset() {
         return text.length();
     }
 
