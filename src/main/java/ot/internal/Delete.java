@@ -20,11 +20,9 @@ class Delete extends TextChange {
         text.buffer.delete(lo, hi);
         for (Integer p : newArrayList((text.markup.asMap().tailMap(lo, false).keySet()))) {
             SortedSet<Markup> m = text.markup.removeAll(p);
-            if (p >= hi) {
-                int d = lo - hi;
-                m.forEach(e -> e.fireShift(d, p + d));
-                text.markup.putAll(p + d, m);
-            }
+            int d = p >= hi ? lo - hi : lo - p;
+            m.forEach(e -> e.fireShift(d, p + d));
+            text.markup.putAll(p + d, m);
         }
         return text;
     }

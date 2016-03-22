@@ -40,6 +40,9 @@ public class AnnotationsTest {
                 , {"I has {a}", "I has {a cat}"}
                 , {"I {has} {a}", "I {has} {a cat}"}
                 , {"I {has} a cat", "I {hassss} a cat"}
+                , {"I {has a} cat", "I {has}"}
+                , {"I {has} a cat", "I {h} a cat"}
+                , {"I a cat", "I a cat"}
                 , {"I {has} a cat", "I hhh{has} a cat"}
                 , {"I {has} a cat", "I hhh{has} a cat"}
                 , {"I {has} a cat", "I {hasssss} a cat"}
