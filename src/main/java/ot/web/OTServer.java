@@ -14,14 +14,15 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-
-import java.util.Locale;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
+import ot.internal.IO;
+import ot.internal.Text;
 
 /**
  * Created by Stas on 3/22/16.
  */
 public class OTServer {
-
     public static void main(String[] args) throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -63,8 +64,18 @@ public class OTServer {
         protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
             if (frame instanceof TextWebSocketFrame) {
                 String request = ((TextWebSocketFrame) frame).text();
-                ctx.channel().writeAndFlush(new TextWebSocketFrame(request.toUpperCase(Locale.US)));
+                Attribute<Text> text = ctx.attr(AttributeKey.valueOf("text"));
+                Text t = text.get();
+                if (t == null) {
+                    t = Text.empty();
+                    if (!text.compareAndSet(null, t))
+                        t = text.get();
+                }
+                t.apply(IO.fromString(request));
+                ctx.channel().writeAndFlush(new TextWebSocketFrame("OK"));
+                System.out.println(t.toString());
             }
         }
     }
+
 }
