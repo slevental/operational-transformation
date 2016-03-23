@@ -28,6 +28,10 @@ public class ComposeTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] d = {
+                {"abcde", "bd", "1b2d3"},
+                {"abc", "bc", "bcd"},
+                {"abc", "abcd", "bcd"},
+                {"abcde", "a", "a123"},
                 {"12345", "1234", "123"},
                 {"12345", "12346", "123467"},
                 {"123", "12a3", "12ab3"},
@@ -36,6 +40,10 @@ public class ComposeTest {
                 {"123", "", "123"},
                 {"123", "123abc", "abc"},
                 {"1ab", "1a", "1b"},
+                {"aaa", "aaa", "aa"},
+                {"abc", "abc", "bc"},
+                {"abc", "bc", "bc"},
+                {"abc", "bc", "c"},
                 {"1a", "1", "a"},
         };
         return asList(d);

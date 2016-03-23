@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Created by Stas on 3/21/16.
@@ -48,16 +49,12 @@ public class Compose {
             } else if (ch1 instanceof Delete) {
                 if (ch2 instanceof Retain) {
                     result.add(ch1);
-                    int len = ((Delete) ch1).len;
-                    if (ch2.offset() > len) {
-                        j.set(new Retain(ch2.offset() - len));
-                        j.previous();
-                    }
+                    j.previous();
                 } else if (ch2 instanceof Insert) {
                     result.add(ch1);
                     result.add(ch2);
                 } else if (ch2 instanceof Delete) {
-                    result.add(new Delete(((Delete) ch1).len + ((Delete) ch2).len));
+                    result.add(new Delete(min(((Delete) ch1).len, ((Delete) ch2).len)));
                 }
             } else if (ch1 instanceof Insert) {
                 if (ch2 instanceof Retain) {
@@ -71,6 +68,7 @@ public class Compose {
                         result.add(new Insert(((Insert) ch2).text + ((Insert) ch1).text));
                 } else if (ch2 instanceof Delete) {
                     result.add(ch1);
+//                    result.add(new Retain(ch1.offset()));
                     result.add(ch2);
                 }
             }
