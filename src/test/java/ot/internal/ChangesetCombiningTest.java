@@ -11,13 +11,13 @@ import static org.junit.Assert.assertEquals;
 import static ot.internal.Text.copy;
 
 @RunWith(Parameterized.class)
-public class TestChangesetCombining {
+public class ChangesetCombiningTest {
     private Text original;
     private Text user1;
     private Text user2;
     private Text expected;
 
-    public TestChangesetCombining(String original, String user1, String user2, String expected) {
+    public ChangesetCombiningTest(String original, String user1, String user2, String expected) {
         this.original = Text.wrap(original);
         this.user1 = Text.wrap(user1);
         this.user2 = Text.wrap(user2);
