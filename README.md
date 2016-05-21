@@ -1,4 +1,4 @@
-# Operational Transformation
+# Operational Transformation [![Build Status](https://travis-ci.org/slevental/operational-transformation.svg?branch=master)](https://travis-ci.org/slevental/operational-transformation)
 
 ##Intruduction
 
