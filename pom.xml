@@ -8,6 +8,18 @@
     <artifactId>ot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Operational Transformation library</name>
+    <description>This is java implementation of OT protocol</description>
+    <url>https://github.com/slevental/operational-transformation</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
