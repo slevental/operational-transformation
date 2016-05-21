@@ -1,6 +1,6 @@
 # Operational Transformation [![Build Status](https://travis-ci.org/slevental/operational-transformation.svg?branch=master)](https://travis-ci.org/slevental/operational-transformation)
 
-##Intruduction
+##Introduction
 
 This library is a reference implementation for OT protocol described introduced in Google Wave and described in their [documentation](https://people.apache.org/~al/wave_docs/ApacheWaveProtocol-0.4.pdf)
 
