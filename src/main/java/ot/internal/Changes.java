@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Stas on 3/12/16.
  */
-class Changes extends Change {
+public class Changes extends Change {
     final List<Change> changes;
 
     Changes(Change... changes) {
