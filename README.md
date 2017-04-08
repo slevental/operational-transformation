@@ -1,14 +1,14 @@
 # Operational Transformation [![Build Status](https://travis-ci.org/slevental/operational-transformation.svg?branch=master)](https://travis-ci.org/slevental/operational-transformation)
 
-##Introduction
+## Introduction
 
 This library is a reference implementation for OT protocol described introduced in Google Wave and described in their [documentation](https://people.apache.org/~al/wave_docs/ApacheWaveProtocol-0.4.pdf)
 
-##Protocol basics
+## Protocol basics
 
 OT protocol may be used to solve consistency problem in a systems where having global locks is not possible as well as loosing stale data, collaborative text editing is an example of such system. Imagine few people writing in a same document and being blocked by each other or some of the changes could gone. To prevent this me should be able to recreated a text having all changes being applied so far as well as local changes and order could be changed safely. 
 
-##Example (2 users)
+## Example (2 users)
 
 We could have two users: Alice and Bob, and two local versions of documents, each user sends their changes to another. Documents will look like **DOC(“Hello ”)** and changes may be something like: **SKIP(6)**, **INS(“World!!!”)** or **DEL(6)**
 
@@ -29,7 +29,7 @@ If we want to set up communication between 2 users we will need async channel, b
 - Change from Bob’s queue (**SKIP(3)+INS(“Alice”)**) is sent to Alice
 - Alice applies this change to her text and gets the same result: **”Hi Alice ”**
 
-##Implementation
+## Implementation
 
 As we san in a previous example we need few things to implement this workflow:
 - be able to generate changes: inserts, deletes and skips (retains)
@@ -62,7 +62,7 @@ System.out.printf("'%s'\n", aliceText); // 'Hi Alice'
 System.out.printf("'%s'\n", bobsText); // 'Hi Alice'
 ```
 
-##Composition
+## Composition
 
 Changes may be combined with each other using following API:
 
@@ -73,7 +73,7 @@ Changes batchChange = Compose.compose(change1, change2);
 System.out.printf(“‘%s\n’”, Text.empty().apply(batchChange)); // Hi Alice
 ```
 
-#TODO
+# TODO
 
 * [ ] Implement changes queue 
 * [ ] Implement different revision counters: VC, LC, revisions
